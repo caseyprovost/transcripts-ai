@@ -1,0 +1,44 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+# == Schema Information
+#
+# Table name: messages
+#
+#  id            :integer          not null, primary key
+#  content       :text             not null
+#  input_tokens  :integer
+#  output_tokens :integer
+#  role          :string
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#  chat_id       :integer          not null
+#  model_id      :string           not null
+#  tool_call_id  :integer          not null
+#
+# Indexes
+#
+#  index_messages_on_chat_id       (chat_id)
+#  index_messages_on_tool_call_id  (tool_call_id)
+#
+# Foreign Keys
+#
+#  chat_id       (chat_id => chats.id)
+#  tool_call_id  (tool_call_id => tool_calls.id)
+#
+one:
+  chat: one
+  role: MyString
+  content: MyText
+  model_id: MyString
+  input_tokens: 1
+  output_tokens: 1
+  tool_call: one
+
+two:
+  chat: two
+  role: MyString
+  content: MyText
+  model_id: MyString
+  input_tokens: 1
+  output_tokens: 1
+  tool_call: two
