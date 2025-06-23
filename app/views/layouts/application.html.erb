@@ -23,9 +23,10 @@
   </head>
 
   <body class="bg-gray-900 text-white font-sans h-screen flex">
-    <%= turbo_stream_from [@chat, :messages] %>
+    <%= turbo_stream_from [current_chat, :messages] %>
     <!-- Sidebar Input Panel -->
     <div class="w-1/2 border-r border-gray-700">
+      <p>current chat is: <%= current_chat.id %></p>
       <%= turbo_frame_tag "transcript", class: "h-full" do %>
         <%= render "transcripts/form", transcript: Transcript.find_by(id: session[:transcript_id]) || Transcript.new %>
       <% end %>
@@ -33,37 +34,15 @@
 
     <!-- Chat Panel -->
     <div class="w-1/2 flex flex-col">
-      <div class="flex-1 p-4">
-        <div class="flex items-start gap-2 mb-4">
-          <div class="bg-purple-600 text-white text-xs px-2 py-1 rounded">AI Assistant</div>
-          <div class="flex-1 bg-gray-800 rounded-lg p-3 text-sm">
-            Hello! I’m your AI assistant. I can help you analyze and discuss your transcript. What would you like to know?
-            <div class="text-gray-400 text-xs mt-2">
-              <%= current_chat.created_at.to_fs(:short) %>
-            </div>
-          </div>
-        </div>
-
-        <%= turbo_frame_tag :chats do %>
-        <% end %>
+      <div class="flex-1 p-4 overflow-y-scroll">
+        <%= turbo_frame_tag dom_id(current_chat, :message_list), src: chat_messages_path(current_chat) %>
       </div>
 
       <!-- Input Bar -->
       <div class="border-t border-gray-700 p-4">
-        <div class="relative">
-          <input
-            type="text"
-            placeholder="Ask me about your transcript..."
-            class="w-full bg-gray-800 text-white text-sm px-4 py-2 pr-10 rounded border border-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-600"
-          />
-          <button class="absolute top-2.5 right-2 text-gray-400 hover:text-white">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
-              viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M14.752 11.168l-9.704 5.66a.75.75 0 001.032 1.04l9.704-5.66m-9.704-5.66a.75.75 0 000 1.04l9.704 5.66a.75.75 0 001.032-1.04l-9.704-5.66z" />
-            </svg>
-          </button>
-        </div>
+        <%= turbo_frame_tag "prompt" do %>
+          <%= render "chats/messages/form", message: Message.new, chat: current_chat %>
+        <% end %>
       </div>
     </div>
   </body>

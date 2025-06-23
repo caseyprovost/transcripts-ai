@@ -11,7 +11,7 @@
 #  updated_at    :datetime         not null
 #  chat_id       :integer          not null
 #  model_id      :string           not null
-#  tool_call_id  :integer          not null
+#  tool_call_id  :integer
 #
 # Indexes
 #

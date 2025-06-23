@@ -1,9 +1,9 @@
 module ApplicationCable
   class Connection < ActionCable::Connection::Base
-    identified_by :current_user
+    # identified_by :current_user
 
     def connect
-      set_current_user || reject_unauthorized_connection
+      # set_current_user || reject_unauthorized_connection
     end
 
     private

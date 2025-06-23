@@ -7,7 +7,7 @@ class CreateMessages < ActiveRecord::Migration[8.0]
       t.string :model_id, null: false
       t.integer :input_tokens
       t.integer :output_tokens
-      t.references :tool_call, null: false, foreign_key: true
+      t.references :tool_call, null: true, foreign_key: true
 
       t.timestamps
     end

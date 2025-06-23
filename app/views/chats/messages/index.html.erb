@@ -1,0 +1,7 @@
+<%= turbo_frame_tag dom_id(@chat, :message_list) do %>
+  <%= render "message", message: Message.new(content: "Hello! I'm your AI assistant. I can help you analyze and discuss your transcript. What would you like to know?", role: "assistant", created_at: @chat.created_at) %>
+
+  <% @messages.each do |message| %>
+    <%= render "message", message: message %>
+  <% end %>
+<% end %>

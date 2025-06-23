@@ -1,0 +1,25 @@
+<div class="flex items-start gap-2 mb-4" id="<%= dom_id(message) %>">
+  <div class="bg-purple-600 text-white text-xs px-2 py-1 rounded">
+    <% if message.role.to_sym == :assistant %>
+      AI Assistant
+    <% else %>
+      You
+    <% end %>
+  </div>
+  <div class="flex-1 bg-gray-800 rounded-lg p-3 text-sm">
+    <div id="<%= dom_id(message, :content) %>">
+      <div>
+        <% if message.content.present? %>
+          <% message.content.split("\n").each do |piece| %>
+            <p class="mb-2"><%= piece %></p>
+          <% end %>
+        <% else %>
+          <span>Thinking...</span>
+        <% end %>
+      </div>
+    </div>
+    <div class="text-gray-400 text-xs mt-2">
+      <%= message.created_at.to_fs(:long) %>
+    </div>
+  </div>
+</div>

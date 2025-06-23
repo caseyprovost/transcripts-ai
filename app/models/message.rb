@@ -11,7 +11,7 @@
 #  updated_at    :datetime         not null
 #  chat_id       :integer          not null
 #  model_id      :string           not null
-#  tool_call_id  :integer          not null
+#  tool_call_id  :integer
 #
 # Indexes
 #
@@ -24,20 +24,51 @@
 #  tool_call_id  (tool_call_id => tool_calls.id)
 #
 class Message < ApplicationRecord
+  include ActionView::RecordIdentifier
+
   acts_as_message
 
   has_many_attached :attachments
 
-  belongs_to :chat
-
   validates :role, presence: true
 
-  broadcasts_to ->(message) { [ message.chat, "messages" ] }
+  before_validation :set_model_id
+
+  after_create :broadcast_new_message
+  # after_update_commit :broadcast_change
+  after_destroy_commit :broadcast_destroy
 
   # Helper to broadcast chunks during streaming
   def broadcast_append_chunk(chunk_content)
-    broadcast_append_to [ chat, "messages" ], # Target the stream
-      target: dom_id(self, "content"), # Target the content div inside the message frame
-      html: chunk_content # Append the raw chunk
+    broadcast_append_to [ chat, :messages ],
+      target: dom_id(self, :content),
+      html: chunk_content
+  end
+
+
+  private
+
+  def broadcast_new_message
+    stream_target = [ chat, :messages ]
+    locals = { message: self }
+    target = dom_id(chat, :message_list)
+
+    broadcast_append_to stream_target, partial: "messages/message", locals: locals, target: target
+  end
+
+  def broadcast_change
+    stream_target = [ chat, :messages ]
+    locals = { message: self }
+
+    broadcast_update_to stream_target, partial: "messages/message", locals: locals, target: dom_id(self)
+  end
+
+  def broadcast_destroy
+    stream_target = [ chat, :messages ]
+    broadcast_remove_to stream_target, target: dom_id(self)
+  end
+
+  def set_model_id
+    self.model_id ||= Chat::MODEL_ID
   end
 end

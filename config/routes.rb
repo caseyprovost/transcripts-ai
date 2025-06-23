@@ -16,5 +16,7 @@ Rails.application.routes.draw do
   root to: "ai#show"
 
   resources :transcripts
-  resources :chats
+  resources :chats do
+    resources :messages, module: :chats
+  end
 end

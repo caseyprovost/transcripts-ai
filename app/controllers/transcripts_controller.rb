@@ -1,10 +1,8 @@
 class TranscriptsController < ApplicationController
   def create
-    if session[:transcript_id]
-      transcript = Transcript.find(session[:transcript_id])
-    else
-      transcript = Transcript.new
-    end
+    transcript = Transcript.find_by(id: session[:transcript_id])
+    transcript ||= Transcript.new
+
 
     transcript.update(transcript_params)
     session[:transcript_id] ||= transcript.id if transcript.persisted?

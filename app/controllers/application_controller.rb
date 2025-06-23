@@ -6,10 +6,17 @@ class ApplicationController < ActionController::Base
 
   def current_chat
     if session[:chat_id]
-      @current_chat ||= RubyLLM.chat.find(session[:chat_id])
+      @current_chat ||= Chat.find(session[:chat_id])
     else
-      @current_chat ||= RubyLLM.chat
-      session[:chat_id] = @current_chat.id
+      record = Chat.new
+      record.save!
+      @current_chat = record
+      session[:chat_id] = record.id
+      record
     end
+  end
+
+  def current_transcript
+    @current_transcript ||= Transcript.find_by(id: session[:transcript_id]) || Transcript.new
   end
 end
