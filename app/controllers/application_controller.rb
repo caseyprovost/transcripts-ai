@@ -10,6 +10,7 @@ class ApplicationController < ActionController::Base
     else
       record = Chat.new
       record.save!
+      record.with_instructions("Please use solely the information found in the transcript to answer questions.")
       @current_chat = record
       session[:chat_id] = record.id
       record
