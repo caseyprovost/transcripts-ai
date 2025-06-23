@@ -26,7 +26,6 @@
     <%= turbo_stream_from [current_chat, :messages] %>
     <!-- Sidebar Input Panel -->
     <div class="w-1/2 border-r border-gray-700">
-      <p>current chat is: <%= current_chat.id %></p>
       <%= turbo_frame_tag "transcript", class: "h-full" do %>
         <%= render "transcripts/form", transcript: Transcript.find_by(id: session[:transcript_id]) || Transcript.new %>
       <% end %>
