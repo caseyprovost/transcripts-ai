@@ -65,6 +65,6 @@ end
 
 gem "dotenv-rails", "~> 3.1"
 
-gem "ruby_llm", "~> 1.3"
+gem "ruby_llm", "~> 1.8"
 
 gem "tailwindcss-rails", "~> 4.2"
